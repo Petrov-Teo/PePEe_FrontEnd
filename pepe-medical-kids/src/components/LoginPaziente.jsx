@@ -10,10 +10,9 @@ const LoginPaziente = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simulazione di login paziente
     if (username === "paziente" && password === "passwordPaziente") {
       localStorage.setItem("auth", JSON.stringify({ role: "paziente" }));
-      navigate("/dashboard-paziente"); // Reindirizza alla dashboard paziente
+      navigate("/dashboard-paziente");
     } else {
       alert("Credenziali non valide per paziente");
     }
@@ -23,7 +22,7 @@ const LoginPaziente = () => {
     <Container style={{ paddingTop: "70px" }}>
       <Row className="justify-content-center">
         <Col md={6}>
-          <h2>Login Paziente</h2>
+          <h2>Login </h2>
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formUsername">
               <Form.Label>Username</Form.Label>

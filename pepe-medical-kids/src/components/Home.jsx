@@ -1,9 +1,21 @@
+import { Button, Col, Container, Row } from "react-bootstrap";
+
 const Home = () => {
   return (
-    <div style={{ paddingTop: "10px" }}>
-      <h1>Benvenuti in PePe Medical Kids</h1>
-      <p>Questa è la homepage della nostra applicazione.</p>
-    </div>
+    <Container>
+      <Row className="justify-content-center">
+        <Col md={12} className="text-center">
+          <h1>Benvenuti in PePe Medical Kids</h1>
+          <p className="lead">
+            Questa è la homepage della nostra applicazione. Scopri i nostri servizi dedicati alla salute dei più
+            piccoli.
+          </p>
+          <Button variant="primary" href="/servizi" className="mt-3">
+            Scopri di più
+          </Button>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

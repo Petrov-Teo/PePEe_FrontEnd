@@ -1,23 +1,20 @@
 import { Navigate } from "react-router-dom";
-import PropTypes from "prop-types";
+import { useAuth } from "./AuthContext"; // Assicurati che il percorso sia corretto
 
 const PrivateRoute = ({ children, role }) => {
-  const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+  const { isAuthenticated, userData } = useAuth(); // Usa il contesto di autenticazione
 
-  if (!auth || !auth.role) {
+  // Controlla se l'utente è autenticato
+  if (!isAuthenticated) {
     return <Navigate to="/login-staff" />;
   }
 
-  if (auth.role !== role) {
+  // Controlla se il ruolo corrisponde
+  if (userData.ruolo !== role) {
     return <Navigate to="/" />;
   }
 
-  return children;
-};
-
-PrivateRoute.propTypes = {
-  children: PropTypes.node.isRequired, // `children` deve essere un nodo React
-  role: PropTypes.string.isRequired, // `role` deve essere una stringa
+  return children; // Se tutto va bene, restituisce i figli
 };
 
 export default PrivateRoute;
