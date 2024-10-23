@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Table, Modal, Form } from "react-bootstrap";
-import axios from "axios";
+import { Button, Table, Modal, Form, Alert, Spinner } from "react-bootstrap";
 
 const MedicoManagement = () => {
   const [medici, setMedici] = useState([]);
@@ -18,13 +17,33 @@ const MedicoManagement = () => {
     specializzazione: "",
     iscrizioneAlboN: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
+  // Funzione per ottenere il token (assumendo che sia nel localStorage)
+  const getToken = () => {
+    return localStorage.getItem("authToken"); // Cambia questa logica in base a come gestisci il token
+  };
+
+  // Funzione per recuperare i medici con token nell'header
   const fetchMedici = async () => {
+    const token = getToken(); // Recupera il token
     try {
-      const response = await axios.get("/medici"); // Modifica l'URL se necessario
-      setMedici(response.data.content); // Supponendo che i dati siano nella proprietà 'content'
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/medici/register/medici`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Aggiungi il token all'header
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setMedici(data.content);
+      } else {
+        console.error("Errore nel recupero dei medici:", response.statusText);
+      }
     } catch (error) {
-      console.error("Errore nel recupero dei medici:", error);
+      console.error("Errore nella comunicazione con il server:", error);
     }
   };
 
@@ -32,6 +51,7 @@ const MedicoManagement = () => {
     fetchMedici();
   }, []);
 
+  // Funzione per aprire il modale
   const handleShowModal = (medico = null) => {
     if (medico) {
       setIsEditMode(true);
@@ -55,40 +75,100 @@ const MedicoManagement = () => {
     setShowModal(true);
   };
 
+  // Funzione per chiudere il modale
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedMedico(null);
+    setErrorMessage("");
   };
 
+  // Funzione per gestire i cambiamenti del form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (isEditMode) {
-      try {
-        await axios.put(`/medici/${selectedMedico}`, formData);
-        fetchMedici(); // Ricarica la lista dei medici
-      } catch (error) {
-        console.error("Errore nell'aggiornamento del medico:", error);
+  // Funzione separata per aggiungere un nuovo medico (POST) con token
+  const addMedico = async () => {
+    const token = getToken(); // Recupera il token
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/medici/register/medici`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, // Aggiungi il token all'header
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        fetchMedici(); // Aggiorna la lista
+        handleCloseModal(); // Chiudi il modale se l'operazione va a buon fine
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || "Errore nell'invio dei dati.");
       }
-    } else {
-      try {
-        await axios.post("/medici/register/medici", formData);
-        fetchMedici(); // Ricarica la lista dei medici
-      } catch (error) {
-        console.error("Errore nel salvataggio del medico:", error);
-      }
+    } catch (error) {
+      setErrorMessage("Errore nella comunicazione con il server.");
     }
-    handleCloseModal();
   };
 
-  const handleDelete = async (id) => {
+  // Funzione separata per modificare un medico esistente (PUT) con token
+  const updateMedico = async () => {
+    const token = getToken(); // Recupera il token
     try {
-      await axios.delete(`/medici/${id}`);
-      fetchMedici(); // Ricarica la lista dei medici
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/medici/${selectedMedico}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`, // Aggiungi il token all'header
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        fetchMedici(); // Aggiorna la lista
+        handleCloseModal(); // Chiudi il modale se l'operazione va a buon fine
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || "Errore nell'aggiornamento dei dati.");
+      }
+    } catch (error) {
+      setErrorMessage("Errore nella comunicazione con il server.");
+    }
+  };
+
+  // Funzione per gestire la sottomissione del form (decide se chiamare addMedico o updateMedico)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage("");
+
+    if (isEditMode) {
+      updateMedico();
+    } else {
+      addMedico();
+    }
+
+    setIsSubmitting(false);
+  };
+
+  // Funzione per eliminare un medico con token
+  const handleDelete = async (id) => {
+    const token = getToken(); // Recupera il token
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/medici/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`, // Aggiungi il token all'header
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        fetchMedici();
+      } else {
+        console.error("Errore nella cancellazione del medico.");
+      }
     } catch (error) {
       console.error("Errore nella cancellazione del medico:", error);
     }
@@ -135,6 +215,7 @@ const MedicoManagement = () => {
           <Modal.Title>{isEditMode ? "Modifica Medico" : "Aggiungi Medico"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formCodiceFiscale">
               <Form.Label>Codice Fiscale</Form.Label>
@@ -144,17 +225,32 @@ const MedicoManagement = () => {
                 value={formData.codiceFiscale}
                 onChange={handleInputChange}
                 required
+                disabled={isSubmitting}
               />
             </Form.Group>
 
             <Form.Group controlId="formNome">
               <Form.Label>Nome</Form.Label>
-              <Form.Control type="text" name="nome" value={formData.nome} onChange={handleInputChange} required />
+              <Form.Control
+                type="text"
+                name="nome"
+                value={formData.nome}
+                onChange={handleInputChange}
+                required
+                disabled={isSubmitting}
+              />
             </Form.Group>
 
             <Form.Group controlId="formCognome">
               <Form.Label>Cognome</Form.Label>
-              <Form.Control type="text" name="cognome" value={formData.cognome} onChange={handleInputChange} required />
+              <Form.Control
+                type="text"
+                name="cognome"
+                value={formData.cognome}
+                onChange={handleInputChange}
+                required
+                disabled={isSubmitting}
+              />
             </Form.Group>
 
             <Form.Group controlId="formDataDiNascita">
@@ -165,6 +261,7 @@ const MedicoManagement = () => {
                 value={formData.dataDiNascita}
                 onChange={handleInputChange}
                 required
+                disabled={isSubmitting}
               />
             </Form.Group>
 
@@ -176,12 +273,20 @@ const MedicoManagement = () => {
                 value={formData.luogoDiNascita}
                 onChange={handleInputChange}
                 required
+                disabled={isSubmitting}
               />
             </Form.Group>
 
             <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" name="email" value={formData.email} onChange={handleInputChange} required />
+              <Form.Control
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                disabled={isSubmitting}
+              />
             </Form.Group>
 
             <Form.Group controlId="formNumeroDiTelefono">
@@ -192,6 +297,7 @@ const MedicoManagement = () => {
                 value={formData.numeroDiTelefono}
                 onChange={handleInputChange}
                 required
+                disabled={isSubmitting}
               />
             </Form.Group>
 
@@ -203,6 +309,7 @@ const MedicoManagement = () => {
                 value={formData.specializzazione}
                 onChange={handleInputChange}
                 required
+                disabled={isSubmitting}
               />
             </Form.Group>
 
@@ -214,11 +321,12 @@ const MedicoManagement = () => {
                 value={formData.iscrizioneAlboN}
                 onChange={handleInputChange}
                 required
+                disabled={isSubmitting}
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
-              {isEditMode ? "Aggiorna" : "Aggiungi"}
+            <Button variant="primary" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? <Spinner animation="border" size="sm" /> : isEditMode ? "Aggiorna" : "Aggiungi"}
             </Button>
           </Form>
         </Modal.Body>

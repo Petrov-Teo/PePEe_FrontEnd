@@ -53,9 +53,17 @@ const BarraDiNavigazione = () => {
                         <Nav.Link as={Link} to="/dashboard-admin">
                           Home Admin
                         </Nav.Link>
-                        <Nav.Link as={Link} to="/gestione-utenti">
-                          Gestione Utenti
-                        </Nav.Link>
+                        <NavDropdown title="Gestione Utenti" id="gestione-utenti-dropdown">
+                          <NavDropdown.Item as={Link} to="/medicoManagement">
+                            Medici
+                          </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/cartelle-mediche/modifica">
+                            Pazienti
+                          </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/cartelle-mediche/rimuovi">
+                            Receptionist
+                          </NavDropdown.Item>
+                        </NavDropdown>
 
                         {/* Dropdown per Cartelle Mediche */}
                         <NavDropdown title="Cartelle Mediche" id="cartelle-mediche-dropdown">

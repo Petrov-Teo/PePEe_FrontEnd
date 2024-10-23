@@ -5,3 +5,14 @@
 .divBgColori {
   background-color: #e9d9d1;
 }
+.card-auto-width {
+  width: auto; /* Automatically adjust the width */
+}
+
+.card-no-border {
+  border: black; /* Remove border */
+}
+
+.card-small-padding {
+  padding: 0.9rem; /* Small padding */
+}

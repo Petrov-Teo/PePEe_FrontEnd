@@ -15,6 +15,7 @@ import NotFound from "./components/NotFound.jsx";
 import { AuthProvider } from "./components/AuthContext";
 import CreaEventoGenerico from "./components/calendario/CreaEventoGenerico.jsx";
 import EventDetails from "./components/calendario/EventDetails";
+import MedicoManagement from "./components/users/MedicoManagement.jsx";
 
 function App() {
   return (
@@ -41,6 +42,14 @@ function App() {
           element={
             <PrivateRoute role="ADMIN">
               <DashboardAdmin />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/medicoManagement"
+          element={
+            <PrivateRoute role="ADMIN">
+              <MedicoManagement />
             </PrivateRoute>
           }
         />

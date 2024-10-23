@@ -7,6 +7,7 @@ const LoginStaff = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState("admins"); // Stato per il ruolo
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -17,8 +18,11 @@ const LoginStaff = () => {
       return alert("Inserisci tutti i campi richiesti");
     }
 
+    // Modifica l'URL in base al ruolo selezionato
+    const endpoint = role === "admins" ? "admins" : "medici";
+
     try {
-      const response = await fetch("http://localhost:3001/auth/login/admins", {
+      const response = await fetch(`http://localhost:3001/auth/login/${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,7 +33,9 @@ const LoginStaff = () => {
       if (response.ok) {
         const { token } = await response.json();
         console.log("Token ricevuto:", token);
-        const userResponse = await fetch("http://localhost:3001/admins/me", {
+
+        // Usa un endpoint diverso per ottenere i dettagli dell'utente
+        const userResponse = await fetch(`http://localhost:3001/${endpoint}/me`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -103,6 +109,15 @@ const LoginStaff = () => {
                 className="mt-2"
                 onChange={() => setShowPassword(!showPassword)}
               />
+            </Form.Group>
+
+            {/* Selettore di Ruolo */}
+            <Form.Group controlId="formRole" className="mt-3">
+              <Form.Label>Ruolo</Form.Label>
+              <Form.Control as="select" value={role} onChange={(e) => setRole(e.target.value)}>
+                <option value="admins">Admin</option>
+                <option value="medici">Medico</option>
+              </Form.Control>
             </Form.Group>
 
             <Button variant="primary" type="submit" className="mt-4 w-100">
