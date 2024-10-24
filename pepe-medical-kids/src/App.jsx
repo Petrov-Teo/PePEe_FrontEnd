@@ -4,36 +4,45 @@ import { Routes, Route } from "react-router-dom";
 import BarraDiNavigazione from "./components/BarraDiNavigazione";
 import Home from "./components/Home";
 import CHiSiamo from "./components/ChiSiamo";
-import LoginStaff from "./components/LoginStaffAdmin.jsx";
+import LoginStaff from "./components/users/LoginStaffAdmin.jsx";
 import DashboardMedico from "./components/dashboards/DashboardMedico.jsx";
 import PrivateRoute from "./components/PrivateRoute";
-import LoginPaziente from "./components/LoginPaziente";
+import LoginPaziente from "./components/users/LoginPaziente.jsx";
 import DashboardAdmin from "./components/dashboards/DashboardAdmin.jsx";
 import DashboardReception from "./components/dashboards/DashboardReception.jsx";
 import DashboardPaziente from "./components/dashboards/DashboardPaziente.jsx";
 import NotFound from "./components/NotFound.jsx";
-import { AuthProvider } from "./components/AuthContext";
+import { AuthProvider } from "./components/users/AuthContext.jsx";
 import CreaEventoGenerico from "./components/calendario/CreaEventoGenerico.jsx";
 import EventDetails from "./components/calendario/EventDetails";
 import MedicoManagement from "./components/users/MedicoManagement.jsx";
+import ResetPassword from "./components/users/ResetPassword.jsx";
+import ResetPasswordViaMail from "./components/users/ResetPasswordViaMail.jsx";
 
 function App() {
   return (
     <AuthProvider>
       <BarraDiNavigazione />
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/chi-siamo" element={<CHiSiamo />} />
-
         <Route path="/login-paziente" element={<LoginPaziente />} />
         <Route path="/login-staff" element={<LoginStaff />} />
+        <Route path="/reset-password-via-mail" element={<ResetPasswordViaMail />} />
 
         <Route
           path="/dashboard-medico"
           element={
             <PrivateRoute role="MEDICO">
               <DashboardMedico />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/:role/reset-password/:idUtente"
+          element={
+            <PrivateRoute role="ADMIN, MEDICO, RECEPTIONIST">
+              <ResetPassword />
             </PrivateRoute>
           }
         />

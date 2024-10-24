@@ -1,7 +1,7 @@
 import { Col, Container, Nav, Navbar, Button, NavDropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import logoPepe from "../assets/logo.png";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "./users/AuthContext";
 import React, { useEffect, useState } from "react";
 
 const BarraDiNavigazione = () => {

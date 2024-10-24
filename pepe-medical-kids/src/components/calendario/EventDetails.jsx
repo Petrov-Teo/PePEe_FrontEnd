@@ -200,20 +200,20 @@ const EventDetails = () => {
                 onChange={(e) => setEditedEvent({ ...editedEvent, nome: e.target.value })}
               />
             </Form.Group>
-            <Form.Group controlId="formDataInizio">
-              <Form.Label>Data Inizio</Form.Label>
-              <Form.Control
-                type="date"
-                value={editedEvent.dataInizio?.substring(0, 10) || ""}
-                onChange={(e) => setEditedEvent({ ...editedEvent, dataInizio: e.target.value })}
-              />
-            </Form.Group>
             <Form.Group controlId="formOraInizio">
               <Form.Label>Ora Inizio</Form.Label>
               <Form.Control
                 type="time"
                 value={editedEvent.oraInizio || ""}
                 onChange={(e) => setEditedEvent({ ...editedEvent, oraInizio: e.target.value })}
+              />
+            </Form.Group>
+            <Form.Group controlId="formDataFine">
+              <Form.Label>Data Fine</Form.Label>
+              <Form.Control
+                type="date"
+                value={editedEvent.dataFine?.substring(0, 10) || ""}
+                onChange={(e) => setEditedEvent({ ...editedEvent, dataFine: e.target.value })}
               />
             </Form.Group>
             <Form.Group controlId="formLuogo">
@@ -284,7 +284,6 @@ const EventDetails = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Modale di conferma modifica */}
       <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Conferma</Modal.Title>
@@ -292,7 +291,6 @@ const EventDetails = () => {
         <Modal.Body>L'evento è stato modificato con successo!</Modal.Body>
       </Modal>
 
-      {/* Modale di conferma cancellazione */}
       <Modal show={showDeleteConfirmationModal} onHide={() => setShowDeleteConfirmationModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Conferma Cancellazione</Modal.Title>

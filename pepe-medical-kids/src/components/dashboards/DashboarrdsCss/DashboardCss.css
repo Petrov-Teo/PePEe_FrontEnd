@@ -16,3 +16,13 @@
 .card-small-padding {
   padding: 0.9rem; /* Small padding */
 }
+
+.card-auto-width {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Transizione per trasformazione e ombra */
+}
+
+.card-auto-width:hover {
+  transform: scale(1.1) translateY(-15px);
+  box-shadow: 0 7px 10px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, rgba(241, 252, 32, 0.4), rgba(214, 31, 31, 0.4));
+}
