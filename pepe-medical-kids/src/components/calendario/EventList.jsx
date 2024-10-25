@@ -8,6 +8,21 @@ import { useNavigate } from "react-router-dom";
 
 const localizer = momentLocalizer(moment);
 
+const messages = {
+  today: "Oggi",
+  previous: "Indietro",
+  next: "Avanti",
+  month: "Mese",
+  week: "Settimana",
+  day: "Giorno",
+  agenda: "Agenda",
+  date: "Data",
+  time: "Orario",
+  event: "Evento",
+  noEventsInRange: "Nessun evento in questo intervallo",
+  showMore: (total) => `+ altri ${total}`,
+};
+
 const EventCalendar = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -82,7 +97,7 @@ const EventCalendar = () => {
 
   return (
     <div>
-      <h2>Calendario Eventi</h2>
+      <h2 className="mt-2 titlePers">Calendario Eventi</h2>
       <Calendar
         localizer={localizer}
         events={events}
@@ -90,6 +105,7 @@ const EventCalendar = () => {
         endAccessor="end"
         style={{ height: 500 }}
         onSelectEvent={handleEventClick}
+        messages={messages} // Traduzioni in italiano
       />
     </div>
   );

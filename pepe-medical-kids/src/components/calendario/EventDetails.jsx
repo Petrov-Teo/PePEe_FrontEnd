@@ -141,7 +141,7 @@ const EventDetails = () => {
   };
 
   return (
-    <Container className="m-5 divBgColori">
+    <Container className="m-5 ">
       <p>
         <br />
         <h1>{event.nome}</h1>

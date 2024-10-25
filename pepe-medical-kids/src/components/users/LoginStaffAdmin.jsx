@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Container, Row, Col, InputGroup } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Importa le icone
 import { useAuth } from "./AuthContext";
@@ -122,6 +122,9 @@ const LoginStaff = () => {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </InputGroup.Text>
               </InputGroup>
+              <div className="text-end mt-2">
+                <Link to="/reset-password-via-mail">Hai dimenticato la tua password?</Link>
+              </div>
             </Form.Group>
 
             <Button variant="primary" type="submit" className="mt-4 w-100">
