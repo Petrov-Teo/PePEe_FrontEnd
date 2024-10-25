@@ -27,60 +27,22 @@ const DashboardAdmin = () => {
   };
 
   const gestioneUtenti = [
-    {
-      icon: pazienteIcon,
-      title: "Gestione Pazienti",
-      link: "/pazienteManagement",
-    },
-    {
-      icon: doctorIcon,
-      title: "Gestione Medici",
-      link: "/medicoManagement",
-    },
-    {
-      icon: deskIcon,
-      title: "Gestione Desk",
-      link: "/deskManagement",
-    },
+    { icon: pazienteIcon, title: "Gestione Pazienti", link: "/pazienteManagement" },
+    { icon: doctorIcon, title: "Gestione Medici", link: "/medicoManagement" },
+    { icon: deskIcon, title: "Gestione Desk", link: "/deskManagement" },
   ];
+
   const cartellaMedica = [
-    {
-      icon: cartellaMedicaicon,
-      title: "Cartelle Mediche",
-      link: "/",
-    },
-    {
-      icon: analisiIcon,
-      title: "Analisi Mediche",
-      link: "/",
-    },
-    {
-      icon: refertomedico,
-      title: "Referto Medico",
-      link: "/medicoManagement",
-    },
-    {
-      icon: certificatoMedico,
-      title: "Certificato Medico",
-      link: "/",
-    },
+    { icon: cartellaMedicaicon, title: "Cartelle Mediche", link: "/" },
+    { icon: analisiIcon, title: "Analisi Mediche", link: "/" },
+    { icon: refertomedico, title: "Referto Medico", link: "/medicoManagement" },
+    { icon: certificatoMedico, title: "Certificato Medico", link: "/" },
   ];
+
   const fatturatoClienti = [
-    {
-      icon: mastrinoIcon,
-      title: "Mastrino Cleinte",
-      link: "/",
-    },
-    {
-      icon: fatturaClienteIcon,
-      title: "Fttura Cliente",
-      link: "/",
-    },
-    {
-      icon: notaCredito,
-      title: "Nota Credito",
-      link: "/medicoManagement",
-    },
+    { icon: mastrinoIcon, title: "Mastrino Cliente", link: "/" },
+    { icon: fatturaClienteIcon, title: "Fattura Cliente", link: "/" },
+    { icon: notaCredito, title: "Nota Credito", link: "/medicoManagement" },
   ];
 
   return (
@@ -90,12 +52,12 @@ const DashboardAdmin = () => {
         <Accordion.Item eventKey="0" className="m-5">
           <Accordion.Header>CALENDARIO</Accordion.Header>
           <Accordion.Body>
-            <Container className="d-flex justify-content-evenly">
-              <Row className="col-4">
-                <Card className="text-center card-auto-width border border-2 mt-2">
+            <Container className="d-flex flex-wrap justify-content-center gap-5">
+              <Row className="col-lg-4 col-md-6 col-12 mb-4">
+                <Card className="text-center card-auto-width border border-2">
                   <Card.Body className="card-small-padding">
                     <div
-                      className="d-flex justify-content-center align-items-center mt-4"
+                      className="d-flex justify-content-center align-items-center"
                       onClick={handleNavigate}
                       style={{ cursor: "pointer" }}
                     >
@@ -105,8 +67,8 @@ const DashboardAdmin = () => {
                   </Card.Body>
                 </Card>
               </Row>
-              <Row className="col-8 mx-4">
-                <Card className="mt-2">
+              <Row className="col-lg-8 col-md-12 col-12">
+                <Card className="">
                   <h3 className="titlePers">
                     Eventi di Oggi <span className="m-0 p-0">{new Date().toLocaleDateString("it-IT")}</span>
                   </h3>
@@ -133,25 +95,16 @@ const DashboardAdmin = () => {
         </Accordion.Item>
       </Accordion>
       <br />
-      <h4 className="mb-4 text-start ms-3">Fatture Cleinti</h4>
+      <h4 className="mb-4 text-start ms-3">Fatture Clienti</h4>
       <div className="container">
         <div className="row g-4">
-          {fatturatoClienti.map((fatturatoClienti, index) => (
-            <div className="col-4" key={index}>
+          {fatturatoClienti.map((item, index) => (
+            <div className="col-lg-4 col-md-6 col-12" key={index}>
               <Card className="text-center card-auto-width border border-2">
                 <Card.Body className="card-small-padding">
-                  <Link
-                    to={fatturatoClienti.link}
-                    className="d-flex flex-column align-items-center text-decoration-none"
-                  >
-                    <img
-                      src={fatturatoClienti.icon}
-                      alt={fatturatoClienti.title}
-                      width={100}
-                      height={100}
-                      className="mb-2"
-                    />
-                    <span className="fs-5 fw-bolder text-dark">{fatturatoClienti.title}</span>
+                  <Link to={item.link} className="d-flex flex-column align-items-center text-decoration-none">
+                    <img src={item.icon} alt={item.title} width={100} height={100} className="mb-2" />
+                    <span className="fs-5 fw-bolder text-dark">{item.title}</span>
                   </Link>
                 </Card.Body>
               </Card>
@@ -162,19 +115,13 @@ const DashboardAdmin = () => {
       <h4 className="mb-4 text-start ms-3">Gestione Utenti</h4>
       <div className="container">
         <div className="row g-4">
-          {gestioneUtenti.map((gestioneUtenti, index) => (
-            <div className="col-4" key={index}>
+          {gestioneUtenti.map((item, index) => (
+            <div className="col-lg-4 col-md-6 col-12" key={index}>
               <Card className="text-center card-auto-width border border-2">
                 <Card.Body className="card-small-padding">
-                  <Link to={gestioneUtenti.link} className="d-flex flex-column align-items-center text-decoration-none">
-                    <img
-                      src={gestioneUtenti.icon}
-                      alt={gestioneUtenti.title}
-                      width={100}
-                      height={100}
-                      className="mb-2"
-                    />
-                    <span className="fs-5 fw-bolder text-dark">{gestioneUtenti.title}</span>
+                  <Link to={item.link} className="d-flex flex-column align-items-center text-decoration-none">
+                    <img src={item.icon} alt={item.title} width={100} height={100} className="mb-2" />
+                    <span className="fs-5 fw-bolder text-dark">{item.title}</span>
                   </Link>
                 </Card.Body>
               </Card>
@@ -186,19 +133,13 @@ const DashboardAdmin = () => {
       <h4 className="mb-4 text-start ms-3">Cartelle Mediche</h4>
       <div className="container">
         <div className="row g-4">
-          {cartellaMedica.map((cartellaMedica, index) => (
-            <div className="col-4" key={index}>
+          {cartellaMedica.map((item, index) => (
+            <div className="col-lg-4 col-md-6 col-12" key={index}>
               <Card className="text-center card-auto-width border border-2">
                 <Card.Body className="card-small-padding">
-                  <Link to={cartellaMedica.link} className="d-flex flex-column align-items-center text-decoration-none">
-                    <img
-                      src={cartellaMedica.icon}
-                      alt={cartellaMedica.title}
-                      width={100}
-                      height={100}
-                      className="mb-2"
-                    />
-                    <span className="fs-5 fw-bolder text-dark">{cartellaMedica.title}</span>
+                  <Link to={item.link} className="d-flex flex-column align-items-center text-decoration-none">
+                    <img src={item.icon} alt={item.title} width={100} height={100} className="mb-2" />
+                    <span className="fs-5 fw-bolder text-dark">{item.title}</span>
                   </Link>
                 </Card.Body>
               </Card>
