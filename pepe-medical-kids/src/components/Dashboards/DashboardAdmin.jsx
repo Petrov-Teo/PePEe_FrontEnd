@@ -47,7 +47,7 @@ const DashboardAdmin = () => {
               <Card.Body className="card-small-padding">
                 <Link to="/" className="d-flex flex-column align-items-center text-decoration-none">
                   <img src={deskIcon} alt="Gestione Pazienti" width={100} height={100} className="mb-2" />
-                  <span className="fs-5 fw-bolder text-dark">Gestione Pazienti</span>
+                  <span className="fs-5 fw-bolder text-dark">Gestione Personale Desk</span>
                 </Link>
               </Card.Body>
             </Card>
