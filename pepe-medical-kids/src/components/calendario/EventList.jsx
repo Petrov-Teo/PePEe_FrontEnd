@@ -3,7 +3,7 @@ import { Alert, Spinner } from "react-bootstrap";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { useAuth } from "../users/AuthContext";
+import { useAuth } from "../config/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const localizer = momentLocalizer(moment);

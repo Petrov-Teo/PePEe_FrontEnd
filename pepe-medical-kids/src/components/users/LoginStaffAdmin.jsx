@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Container, Row, Col, InputGroup } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Importa le icone
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../config/AuthContext";
 
 const LoginStaff = () => {
   const [email, setEmail] = useState("");

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../users/AuthContext";
+import { useAuth } from "../config/AuthContext";
 
 const useDailyEvents = () => {
   const [dailyEvents, setDailyEvents] = useState([]);

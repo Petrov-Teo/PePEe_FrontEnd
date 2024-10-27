@@ -1,0 +1,60 @@
+.bottonHome {
+  transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+
+.bottonHome:hover {
+  transform: scale(1.1) translateY(-10px);
+  box-shadow: 0 7px 10px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, rgba(241, 252, 32, 0.4), rgba(214, 31, 31, 0.4));
+}
+
+.divDescrizioni {
+  background: linear-gradient(135deg, rgba(241, 252, 32, 0.4), rgba(214, 31, 31, 0.4));
+}
+.card-img-top {
+  height: 250px;
+  object-fit: cover;
+}
+.service-image {
+  width: 300px;
+  height: 230px;
+  object-fit: cover;
+}
+.large-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+.social-icons a {
+  color: #4caf50;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #2e7d32;
+}
+
+.btn-custom {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  transition: background-color 0.4s ease;
+}
+
+.btn-custom:hover {
+  background-color: #2e7d32;
+  color: #fff;
+}
+.footer-links a {
+  color: #4caf50;
+  transition: color 0.4s ease;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #2e7d32;
+}
+.icon-size {
+  font-size: 1.4rem;
+}

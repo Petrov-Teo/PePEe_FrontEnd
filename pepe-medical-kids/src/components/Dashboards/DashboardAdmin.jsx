@@ -6,7 +6,7 @@ import doctorIcon from "/src/assets/dashboard/doctor-male-svgrepo-com.svg";
 import pazienteIcon from "/src/assets/dashboard/paziente.svg";
 import deskIcon from "/src/assets/dashboard/desk.svg";
 import creEventoIcona from "/src/assets/dashboard/event-svgrepo-com.svg";
-import useDailyEvents from "../calendario/UseDailyEvents";
+import useDailyEvents from "/src/components/calendario/useDailyEvents.jsx";
 import analisiIcon from "/src/assets/dashboard/analisimediche.svg";
 import refertomedico from "/src/assets/dashboard/refetomedico.svg";
 import certificatoMedico from "/src/assets/dashboard/certificatomedico.svg";
@@ -14,8 +14,9 @@ import cartellaMedicaicon from "/src/assets/dashboard/cartelleMedicaDef.svg";
 import mastrinoIcon from "/src/assets/dashboard/mastriniClienti.svg";
 import fatturaClienteIcon from "/src/assets/dashboard/fatturaClienteDef.svg";
 import notaCredito from "/src/assets/dashboard/notaCreditoCliente.svg";
+import ContattiRicevuti from "/src/components/comunicazioni/ContattiRicevuti.jsx";
 
-import "/src/components/dashboards/dashboarrdsCss/DashboardCss.css";
+import "/src/components/dashboards/DashboardCss.css";
 
 const DashboardAdmin = () => {
   const navigate = useNavigate();
@@ -48,6 +49,9 @@ const DashboardAdmin = () => {
   return (
     <div>
       <h2 className="fs-1 titlePers">Dashboard Admin</h2>
+      <Row>
+        <ContattiRicevuti />
+      </Row>
       <Accordion activeKey={activeKey} onSelect={setActiveKey}>
         <Accordion.Item eventKey="0" className="m-5">
           <Accordion.Header>CALENDARIO</Accordion.Header>

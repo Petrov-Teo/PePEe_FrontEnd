@@ -1,23 +1,23 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import BarraDiNavigazione from "./components/BarraDiNavigazione";
-import Home from "./components/Home";
-import CHiSiamo from "./components/ChiSiamo";
+import BarraDiNavigazione from "/src/components/config/BarraDiNavigazione.jsx";
+import Home from "./components/staticsPages/Home.jsx";
 import LoginStaff from "./components/users/LoginStaffAdmin.jsx";
 import DashboardMedico from "./components/dashboards/DashboardMedico.jsx";
-import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "/src/components/config/PrivateRoute.jsx";
 import LoginPaziente from "./components/users/LoginPaziente.jsx";
 import DashboardAdmin from "./components/dashboards/DashboardAdmin.jsx";
 import DashboardReception from "./components/dashboards/DashboardReception.jsx";
 import DashboardPaziente from "./components/dashboards/DashboardPaziente.jsx";
-import NotFound from "./components/NotFound.jsx";
-import { AuthProvider } from "./components/users/AuthContext.jsx";
+import NotFound from "./components/staticsPages/NotFound.jsx";
+import { AuthProvider } from "./components/config/AuthContext.jsx";
 import CreaEventoGenerico from "./components/calendario/CreaEventoGenerico.jsx";
 import EventDetails from "./components/calendario/EventDetails";
 import MedicoManagement from "./components/users/MedicoManagement.jsx";
 import ResetPassword from "./components/users/ResetPassword.jsx";
 import ResetPasswordViaMail from "./components/users/ResetPasswordViaMail.jsx";
+import DettagliContatto from "/src/components/comunicazioni/DettagliContatto.jsx";
 
 function App() {
   return (
@@ -25,7 +25,6 @@ function App() {
       <BarraDiNavigazione />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/chi-siamo" element={<CHiSiamo />} />
         <Route path="/login-paziente" element={<LoginPaziente />} />
         <Route path="/login-staff" element={<LoginStaff />} />
         <Route path="/reset-password-via-mail" element={<ResetPasswordViaMail />} />
@@ -91,6 +90,14 @@ function App() {
           element={
             <PrivateRoute role="ADMIN">
               <EventDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/contatti/:id"
+          element={
+            <PrivateRoute role="ADMIN,RECEPTIONIST">
+              <DettagliContatto />
             </PrivateRoute>
           }
         />
