@@ -1,12 +1,14 @@
 import { Col, Container, Nav, Navbar, Button, NavDropdown } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
 import logoPepe from "/src/assets/logo.png";
 import { useAuth } from "/src/components/config/AuthContext.jsx";
 import React, { useEffect, useState } from "react";
+import "/src/components/config/ConfigCss.css"
 
 const BarraDiNavigazione = () => {
   const { isAuthenticated, userData, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showNavbarItems, setShowNavbarItems] = useState(true);
 
   const handleLogout = () => {
@@ -39,7 +41,7 @@ const BarraDiNavigazione = () => {
             className="d-inline-block align-top"
             alt="PePe Medical Kids logo"
           />
-          <Col className="text-center">A Cuore La Salute Dei Più Piccoli </Col>
+          <Col className="text-center">A Cuore La Salute Dei Più Piccoli</Col>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -53,7 +55,7 @@ const BarraDiNavigazione = () => {
                         <Nav.Link as={Link} to="/dashboard-admin">
                           Home Admin
                         </Nav.Link>
-                        <NavDropdown title="Gestione Utenti" id="gestione-utenti-dropdown">
+                        <NavDropdown title="Gestione Utenti" id="gestione-utenti-dropdown" className="custom-dropdown">
                           <NavDropdown.Item as={Link} to="/medicoManagement">
                             Medici
                           </NavDropdown.Item>
@@ -65,8 +67,7 @@ const BarraDiNavigazione = () => {
                           </NavDropdown.Item>
                         </NavDropdown>
 
-                        {/* Dropdown per Cartelle Mediche */}
-                        <NavDropdown title="Cartelle Mediche" id="cartelle-mediche-dropdown">
+                        <NavDropdown title="Cartelle Mediche" id="cartelle-mediche-dropdown" className="custom-dropdown">
                           <NavDropdown.Item as={Link} to="/cartelle-mediche/visualizza">
                             Visualizza Cartelle Mediche
                           </NavDropdown.Item>
@@ -84,27 +85,21 @@ const BarraDiNavigazione = () => {
                     )}
 
                     {userData.ruolo === "MEDICO" && (
-                      <>
-                        <Nav.Link as={Link} to="/dashboard-medico">
-                          Dashboard Medico
-                        </Nav.Link>
-                      </>
+                      <Nav.Link as={Link} to="/dashboard-medico">
+                        Dashboard Medico
+                      </Nav.Link>
                     )}
 
                     {userData.ruolo === "RECEPTION" && (
-                      <>
-                        <Nav.Link as={Link} to="/dashboard-reception">
-                          Dashboard Reception
-                        </Nav.Link>
-                      </>
+                      <Nav.Link as={Link} to="/dashboard-reception">
+                        Dashboard Reception
+                      </Nav.Link>
                     )}
 
                     {userData.ruolo === "PAZIENTE" && (
-                      <>
-                        <Nav.Link as={Link} to="/dashboard-paziente">
-                          Dashboard Paziente
-                        </Nav.Link>
-                      </>
+                      <Nav.Link as={Link} to="/dashboard-paziente">
+                        Dashboard Paziente
+                      </Nav.Link>
                     )}
                   </>
                 )}
@@ -114,10 +109,14 @@ const BarraDiNavigazione = () => {
                 <Nav.Link as={Link} to="/">
                   Home
                 </Nav.Link>
-                <Nav.Link href="#chi-siamo">Chi Siamo</Nav.Link>
-                <Nav.Link href="#i-nostri-servizi">Servizi</Nav.Link>
-                <Nav.Link href="#contattaci">Contatti</Nav.Link>
-                <Nav.Link href="#dove-siamo">Dove Siamo</Nav.Link>
+                {location.pathname === "/" && (
+                  <>
+                    <Nav.Link href="#chi-siamo">Chi Siamo</Nav.Link>
+                    <Nav.Link href="#i-nostri-servizi">Servizi</Nav.Link>
+                    <Nav.Link href="#contattaci">Contatti</Nav.Link>
+                    <Nav.Link href="#dove-siamo">Dove Siamo</Nav.Link>
+                  </>
+                )}
               </>
             )}
           </Nav>
@@ -133,9 +132,19 @@ const BarraDiNavigazione = () => {
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to="/login-paziente">
-                  Login Paziente
+                <Nav.Link as={Link} to="/login-paziente" className="d-flex align-items-center custom-dropdown">
+                  Login Utente
+                  <i className="bi bi-caret-down-fill ms-1"></i> {/* Icona freccia */}
                 </Nav.Link>
+                <NavDropdown
+                  title=""
+                  id="dropdown-menu-align-center"
+                  className="custom-centered-dropdown"
+                >
+                  <NavDropdown.Item as={Link} to="/registrazione-utente">
+                    Registrati
+                  </NavDropdown.Item>
+                </NavDropdown>
                 <Nav.Link as={Link} to="/login-staff">
                   Login Staff
                 </Nav.Link>

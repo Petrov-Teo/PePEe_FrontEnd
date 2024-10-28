@@ -83,9 +83,9 @@ const DashboardAdmin = () => {
                     <ul>
                       {dailyEvents.map((event) => (
                         <li key={event.id}>
-                          {event.title}{" "}
-                          {new Date(event.start).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}{" "}
-                          fino alle{" "}
+                          {event.title}
+                          {new Date(event.start).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
+                          fino alle
                           {new Date(event.end).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
                         </li>
                       ))}

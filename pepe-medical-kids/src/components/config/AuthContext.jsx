@@ -5,10 +5,17 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    if (token) {
+    const storedUser = localStorage.getItem("userData");
+
+    if (token && storedUser) {
+      setUserData(JSON.parse(storedUser));
+      setIsAuthenticated(true);
+      setLoading(false);
+    } else if (token) {
       fetch("http://localhost:3001/admins/me", {
         method: "GET",
         headers: {
@@ -25,13 +32,15 @@ export const AuthProvider = ({ children }) => {
         .then((data) => {
           setIsAuthenticated(true);
           setUserData(data);
+          localStorage.setItem("userData", JSON.stringify(data)); // Memorizza i dettagli dell'utente
         })
         .catch((error) => {
           console.error("Errore nel recupero dei dettagli dell'utente:", error);
-          setIsAuthenticated(false);
-        });
+          logout();
+        })
+        .finally(() => setLoading(false));
     } else {
-      setIsAuthenticated(false);
+      setLoading(false);
     }
   }, []);
 
@@ -49,7 +58,11 @@ export const AuthProvider = ({ children }) => {
     setUserData(null);
   };
 
-  return <AuthContext.Provider value={{ isAuthenticated, userData, login, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, userData, login, logout, loading }}>
+      {loading ? <p>Caricamento...</p> : children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);

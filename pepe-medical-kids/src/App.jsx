@@ -18,6 +18,7 @@ import MedicoManagement from "./components/users/MedicoManagement.jsx";
 import ResetPassword from "./components/users/ResetPassword.jsx";
 import ResetPasswordViaMail from "./components/users/ResetPasswordViaMail.jsx";
 import DettagliContatto from "/src/components/comunicazioni/DettagliContatto.jsx";
+import RegistrazioneUtente from "./components/users/RegistrazioneUtenti.jsx";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/login-paziente" element={<LoginPaziente />} />
         <Route path="/login-staff" element={<LoginStaff />} />
         <Route path="/reset-password-via-mail" element={<ResetPasswordViaMail />} />
+        <Route path="/registrazione-utente" element={<RegistrazioneUtente />} />
 
         <Route
           path="/dashboard-medico"

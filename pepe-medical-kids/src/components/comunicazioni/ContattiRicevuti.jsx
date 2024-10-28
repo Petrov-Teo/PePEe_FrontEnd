@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Alert, ListGroup, Accordion } from "react-bootstrap";
+import { Alert, Container, Table, Row, Col } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
+import nessunContatto from "/src/assets/comunicazioni/presenzaContatti.svg";
+import nessunContattoIcon from "/src/assets/comunicazioni/nessunContatto.svg"; // Nuova icona
+import "/src/components/comunicazioni/ComunicazioniCss.css";
 
 const ContattiRicevuti = () => {
   const navigate = useNavigate();
   const [contattiAll, setContattiAll] = useState([]);
   const [error, setError] = useState(null);
+  const [mostraDettagli, setMostraDettagli] = useState(false);
 
   const token = localStorage.getItem("authToken");
 
@@ -30,84 +34,86 @@ const ContattiRicevuti = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/comunicazioni/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.ok) {
-        setContattiAll(contattiAll.filter((contatto) => contatto.idRichiestaComunicazione !== id));
-      } else {
-        setError("Errore nell'eliminazione del contatto.");
-      }
-    } catch (error) {
-      setError("Errore nella richiesta di eliminazione: " + error.message);
-    }
-  };
-
   useEffect(() => {
     fetchContatti();
-  }, []); // Se desideri aggiornare i contatti in base a qualche dipendenza, aggiungila qui
+  }, []);
 
-  const handleDetailClick = (id) => {
-    navigate(`/contatti/${id}`);
-  };
+  const hasMessages = contattiAll.length > 0;
+  const contattiNonGestiti = contattiAll.filter((contatto) => !contatto.gestito);
+  const numeroContattiDaGestire = contattiNonGestiti.length;
 
   if (error) {
     return <Alert variant="danger">{error}</Alert>;
   }
 
-  if (contattiAll.length === 0) {
-    return <p>Nessun contatto trovato.</p>;
-  }
-
-  console.log(contattiAll);
-
   return (
-    <Accordion defaultActiveKey="0">
-      <Accordion.Item eventKey="0">
-        <Accordion.Header>Contatti Ricevuti</Accordion.Header>
-        <Accordion.Body>
-          <ListGroup>
-            {contattiAll.map((contatto) => (
-              <ListGroup.Item key={contatto.id} className="mb-3 d-flex justify-content-between align-items-center">
-                <div>
-                  <p
-                    style={{ cursor: "pointer", color: "blue" }}
-                    onClick={() => handleDetailClick(contatto.idRichiestaComunicazione)}
-                  >
-                    Nome: {contatto.nome}
-                  </p>
-                  <p>Email: {contatto.email}</p>
-                  <p>
-                    Data Inviata:{" "}
+    <Container className="text-center">
+      <Row className="align-items-center mb-3 justify-content-center">
+        <Col xs="auto">
+          <p
+            className={`contatto-messaggio ${numeroContattiDaGestire === 0 ? "text-muted" : ""}`}
+            onClick={() => setMostraDettagli(!mostraDettagli)}
+          >
+            <img
+              src={numeroContattiDaGestire === 0 ? nessunContattoIcon : nessunContatto}
+              alt="Nessun Contatto"
+              className="contatto-icon"
+            />
+            Hai {numeroContattiDaGestire} {numeroContattiDaGestire === 1 ? "contatto" : "contatti"} da gestire.
+          </p>
+        </Col>
+      </Row>
+
+      {mostraDettagli && (
+        <Table striped bordered hover responsive className="mx-auto">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Gestione</th>
+              <th>Email</th>
+              <th>Data Inviata</th>
+              <th>Note</th>
+              <th>Stato</th>
+            </tr>
+          </thead>
+          <tbody>
+            {contattiAll.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="text-muted">
+                  Nessun contatto da mostrare.
+                </td>
+              </tr>
+            ) : (
+              contattiAll.map((contatto) => (
+                <tr
+                  key={contatto.idRichiestaComunicazione}
+                  onClick={() => navigate(`/contatti/${contatto.idRichiestaComunicazione}`)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <td>{contatto.nome}</td>
+                  <td>{contatto.gestito ? "Gestito" : "Non Gestito"}</td>
+                  <td>{contatto.email}</td>
+                  <td>
                     {new Date(contatto.dataInvio).toLocaleString("it-IT", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
                       hour: "2-digit",
                       minute: "2-digit",
+                      hour12: false,
                     })}
-                  </p>
-                  <p className={contatto.letto ? "text-black" : "font-weight-bold text-danger"}>
+                  </td>
+                  <td>{contatto.note}</td>
+                  <td className={contatto.letto ? "text-black" : "font-weight-bold text-danger"}>
                     {contatto.letto ? "Letto" : "Non Letto"}
-                  </p>
-                  <p>Note: {contatto.note}</p>
-                </div>
-                <FaTrash
-                  style={{ cursor: "pointer", color: "red" }}
-                  onClick={() => handleDelete(contatto.idRichiestaComunicazione)}
-                />
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Accordion.Body>
-      </Accordion.Item>
-    </Accordion>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </Table>
+      )}
+    </Container>
   );
 };
 

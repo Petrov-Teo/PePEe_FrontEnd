@@ -1,0 +1,13 @@
+.custom-dropdown .dropdown-menu {
+    text-align: center; /* Centro del contenuto */
+  }
+  
+  .custom-centered-dropdown .dropdown-menu {
+    left: 50%;
+    transform: translateX(-50%); 
+  }
+  
+  .bi-caret-down-fill {
+    margin-left: -12 px; 
+    font-size: 0.9em;
+  }
