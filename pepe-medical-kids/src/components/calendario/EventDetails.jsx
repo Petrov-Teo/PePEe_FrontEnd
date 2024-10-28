@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Spinner, Alert, Button, Modal, Form } from "react-bootstrap";
-import "../dashboards/DashboarrdsCss/DashboardCss.css";
+import "../dashboards/DashboardCss.css";
 
 const EventDetails = () => {
   const { idEvento } = useParams();
@@ -141,7 +141,7 @@ const EventDetails = () => {
   };
 
   return (
-    <Container className="m-5 divBgColori">
+    <Container className="m-5 ">
       <p>
         <br />
         <h1>{event.nome}</h1>

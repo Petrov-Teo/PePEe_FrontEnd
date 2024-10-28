@@ -51,7 +51,7 @@ const MedicoManagement = () => {
     fetchMedici();
   }, []);
 
-  // Funzione per aprire il modale
+
   const handleShowModal = (medico = null) => {
     if (medico) {
       setIsEditMode(true);
@@ -75,35 +75,34 @@ const MedicoManagement = () => {
     setShowModal(true);
   };
 
-  // Funzione per chiudere il modale
+
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedMedico(null);
     setErrorMessage("");
   };
 
-  // Funzione per gestire i cambiamenti del form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Funzione separata per aggiungere un nuovo medico (POST) con token
+
   const addMedico = async () => {
-    const token = getToken(); // Recupera il token
+    const token = getToken();
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/medici/register/medici`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`, // Aggiungi il token all'header
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        fetchMedici(); // Aggiorna la lista
-        handleCloseModal(); // Chiudi il modale se l'operazione va a buon fine
+        fetchMedici();
+        handleCloseModal();
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message || "Errore nell'invio dei dati.");
@@ -113,22 +112,22 @@ const MedicoManagement = () => {
     }
   };
 
-  // Funzione separata per modificare un medico esistente (PUT) con token
+
   const updateMedico = async () => {
-    const token = getToken(); // Recupera il token
+    const token = getToken();
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/medici/${selectedMedico}`, {
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${token}`, // Aggiungi il token all'header
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        fetchMedici(); // Aggiorna la lista
-        handleCloseModal(); // Chiudi il modale se l'operazione va a buon fine
+        fetchMedici();
+        handleCloseModal();
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message || "Errore nell'aggiornamento dei dati.");
@@ -138,7 +137,7 @@ const MedicoManagement = () => {
     }
   };
 
-  // Funzione per gestire la sottomissione del form (decide se chiamare addMedico o updateMedico)
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -153,14 +152,14 @@ const MedicoManagement = () => {
     setIsSubmitting(false);
   };
 
-  // Funzione per eliminare un medico con token
+
   const handleDelete = async (id) => {
-    const token = getToken(); // Recupera il token
+    const token = getToken();
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/medici/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${token}`, // Aggiungi il token all'header
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
