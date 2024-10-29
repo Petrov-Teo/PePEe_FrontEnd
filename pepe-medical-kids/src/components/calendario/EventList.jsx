@@ -105,7 +105,7 @@ const EventCalendar = () => {
         endAccessor="end"
         style={{ height: 500 }}
         onSelectEvent={handleEventClick}
-        messages={messages} // Traduzioni in italiano
+        messages={messages}
       />
     </div>
   );

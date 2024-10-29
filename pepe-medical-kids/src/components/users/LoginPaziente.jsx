@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, InputGroup } from "react-bootstrap";
 import { useAuth } from "../config/AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import "/src/components/users/UsersCss.css"
 
 
 const LoginPaziente = () => {
@@ -128,7 +129,7 @@ const LoginPaziente = () => {
               </div>
             </Form.Group>
 
-            <Button variant="primary" type="submit" className="mt-4 w-100">
+            <Button type="submit" className="mt-4 w-100 btn-custom">
               Login
             </Button>
             <Col>

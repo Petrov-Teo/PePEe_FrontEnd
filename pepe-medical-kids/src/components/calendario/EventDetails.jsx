@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Spinner, Alert, Button, Modal, Form } from "react-bootstrap";
-import "../dashboards/DashboardCss.css";
+import "/src/components/calendario/CalendarioCss.css"
 
 const EventDetails = () => {
   const { idEvento } = useParams();
@@ -42,7 +42,12 @@ const EventDetails = () => {
       }
     };
 
-    fetchEventDetails();
+    if (idEvento) {
+      fetchEventDetails();
+    } else {
+      setError("ID evento non valido o mancante.");
+      setLoading(false);
+    }
   }, [idEvento]);
 
   const handleEdit = () => {
@@ -52,7 +57,7 @@ const EventDetails = () => {
   const handleSaveChanges = async () => {
     try {
       const token = localStorage.getItem("authToken")?.trim();
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/genericEvents/updateEventi/${idEvento}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/genericEvents/updateEventiGenerici/${idEvento}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -65,14 +70,16 @@ const EventDetails = () => {
         throw new Error("Errore durante l'aggiornamento dell'evento");
       }
 
-      const updatedEvent = await response.json();
-      setEvent(updatedEvent);
+      const data = await response.json();
+      setEvent(data[0]);
       setShowEditModal(false);
       setShowConfirmationModal(true);
+      console.log(data)
 
       setTimeout(() => {
         setShowConfirmationModal(false);
-      }, 3000);
+        navigate(`/genericEvents/${data[0].idEvento}`);
+      }, 2000);
     } catch (error) {
       setError(error.message);
     }
@@ -86,9 +93,8 @@ const EventDetails = () => {
     try {
       const token = localStorage.getItem("authToken")?.trim();
       const deleteUrl = `${import.meta.env.VITE_API_URL}/genericEvents/${idEvento}`;
-      let requestUrl = deleteUrl;
-
       const params = new URLSearchParams();
+
       if (deleteOption === "all") {
         params.append("deleteEntireSeries", "true");
       } else if (deleteOption === "future") {
@@ -97,7 +103,7 @@ const EventDetails = () => {
         params.append("deleteEntireSeries", "false");
       }
 
-      const response = await fetch(`${requestUrl}?${params.toString()}`, {
+      const response = await fetch(`${deleteUrl}?${params.toString()}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -137,16 +143,12 @@ const EventDetails = () => {
   }
 
   const handleBack = () => {
-    navigate(-1);
+    navigate("/dashboard-admin");
   };
 
   return (
-    <Container className="m-5 ">
-      <p>
-        <br />
-        <h1>{event.nome}</h1>
-        <br />
-      </p>
+    <Container className="m-5 formGroup col-10">
+      <h1>{event.nome}</h1>
       <p>
         <strong>Data Inizio:</strong> {new Date(event.dataInizio).toLocaleDateString()}
       </p>
@@ -154,13 +156,13 @@ const EventDetails = () => {
         <strong>Ora Inizio:</strong> {event.oraInizio}
       </p>
       <p>
-        <strong>Ora Ora Fine:</strong> {event.oraFine}
+        <strong>Ora Fine:</strong> {event.oraFine}
       </p>
       <p>
-        <strong>Evento Riccorrente:</strong> {event.eventoRicorrente ? "NO" : "SI"}
+        <strong>Evento Ricorrente:</strong> {event.eventoRicorrente ? "NO" : "SI"}
       </p>
       <p>
-        <strong>Tipo Riccorrena:</strong> {event.tipoRicorrenza}
+        <strong>Tipo Ricorrenza:</strong> {event.tipoRicorrenza}
       </p>
       <p>
         <strong>Data Fine:</strong> {new Date(event.dataFineRicorrenza).toLocaleDateString()}
@@ -173,16 +175,14 @@ const EventDetails = () => {
       </p>
       <p>
         <strong>Partecipanti:</strong> {event.partecipanti}
-        <br />
-        <br />
       </p>
-      <Button variant="secondary" className="mx-2" onClick={handleBack}>
+      <Button variant="secondary" className="mx-2 mb-3" onClick={handleBack}>
         Indietro
       </Button>
-      <Button variant="primary" onClick={handleEdit}>
+      <Button className="btn-custom mb-3" onClick={handleEdit}>
         Modifica Evento
       </Button>
-      <Button variant="danger" onClick={handleDelete} className="ms-2">
+      <Button variant="danger" onClick={handleDelete} className="ms-2 mb-3">
         Cancella Evento
       </Button>
 
@@ -190,7 +190,7 @@ const EventDetails = () => {
         <Modal.Header closeButton>
           <Modal.Title>Modifica Evento</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="formGroup">
           <Form>
             <Form.Group controlId="formNome">
               <Form.Label>Nome Evento</Form.Label>
@@ -237,40 +237,56 @@ const EventDetails = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Annulla
+            Chiudi
           </Button>
-          <Button variant="primary" onClick={handleSaveChanges}>
+          <Button className="btn-custom" onClick={handleSaveChanges}>
             Salva Modifiche
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modifica Avvenuta con Successo</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Le modifiche all'evento sono state salvate.</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowConfirmationModal(false)}>
+            Chiudi
           </Button>
         </Modal.Footer>
       </Modal>
 
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Cancella Evento Ricorrente</Modal.Title>
+          <Modal.Title>Conferma Cancellazione</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <p>Seleziona l'opzione per la cancellazione:</p>
           <Form>
             <Form.Check
               type="radio"
-              id="deleteSingle"
-              label="Cancella solo questa occorrenza"
+              label="Cancella solo questo evento"
+              name="deleteOption"
+              value="single"
               checked={deleteOption === "single"}
-              onChange={() => setDeleteOption("single")}
+              onChange={(e) => setDeleteOption(e.target.value)}
             />
             <Form.Check
               type="radio"
-              id="deleteFuture"
-              label="Cancella questa e le future occorrenze"
+              label="Cancella tutti gli eventi futuri"
+              name="deleteOption"
+              value="future"
               checked={deleteOption === "future"}
-              onChange={() => setDeleteOption("future")}
+              onChange={(e) => setDeleteOption(e.target.value)}
             />
             <Form.Check
               type="radio"
-              id="deleteAll"
-              label="Cancella tutte le occorrenze"
+              label="Cancella l'intera serie di eventi"
+              name="deleteOption"
+              value="all"
               checked={deleteOption === "all"}
-              onChange={() => setDeleteOption("all")}
+              onChange={(e) => setDeleteOption(e.target.value)}
             />
           </Form>
         </Modal.Body>
@@ -279,23 +295,21 @@ const EventDetails = () => {
             Annulla
           </Button>
           <Button variant="danger" onClick={confirmDelete}>
-            Cancella Evento
+            Conferma Cancellazione
           </Button>
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Conferma</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>L'evento è stato modificato con successo!</Modal.Body>
-      </Modal>
-
       <Modal show={showDeleteConfirmationModal} onHide={() => setShowDeleteConfirmationModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Conferma Cancellazione</Modal.Title>
+          <Modal.Title>Cancellazione Avvenuta con Successo</Modal.Title>
         </Modal.Header>
-        <Modal.Body>L'evento è stato cancellato con successo!</Modal.Body>
+        <Modal.Body>L'evento è stato cancellato con successo.</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteConfirmationModal(false)}>
+            Chiudi
+          </Button>
+        </Modal.Footer>
       </Modal>
     </Container>
   );

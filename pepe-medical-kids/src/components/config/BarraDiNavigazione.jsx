@@ -134,7 +134,7 @@ const BarraDiNavigazione = () => {
               <>
                 <Nav.Link as={Link} to="/login-paziente" className="d-flex align-items-center custom-dropdown">
                   Login Utente
-                  <i className="bi bi-caret-down-fill ms-1"></i> {/* Icona freccia */}
+                  <i className="bi bi-caret-down-fill ms-1"></i>
                 </Nav.Link>
                 <NavDropdown
                   title=""

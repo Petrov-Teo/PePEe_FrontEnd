@@ -44,3 +44,7 @@
   color: #7f8c8d;
   border: 2px solid #7f8c8d;
 }
+
+.formGroup{
+  background: linear-gradient(135deg, rgba(173, 216, 230, 0.4), rgba(255, 182, 193, 0.4));
+ }

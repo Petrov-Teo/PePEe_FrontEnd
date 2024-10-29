@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import "/src/components/calendario/CalendarioCss.css"
 
 const CreaEventoGenerico = () => {
   const navigate = useNavigate();
@@ -109,7 +110,7 @@ const CreaEventoGenerico = () => {
       const data = await response.json();
       setServerResponse({ status: "success", message: "Evento creato con successo!" });
 
-      // Reset dei campi del modulo
+
       setFormData({
         nome: "",
         dataInizio: new Date(),
@@ -145,12 +146,12 @@ const CreaEventoGenerico = () => {
 
   return (
     <>
-      <Container>
+      <Container className="">
         <h1 className="mt-3">Crea Nuovo Evento</h1>
       </Container>
-      <Container className="d-flex justify-content-center align-items-center vh-100">
-        <Form className="col-4" onSubmit={handleSubmit}>
-          {/* Nome Evento */}
+      <Container className="d-flex justify-content-center align-items-center vh-100 formGroup col-10 rounded">
+        <Form className="col-12 col-md-8 col-lg-6" onSubmit={handleSubmit}>
+
           <FloatingLabel controlId="nome" label="Nome Evento" className="mb-3">
             <Form.Control
               type="text"
@@ -252,13 +253,42 @@ const CreaEventoGenerico = () => {
               value={formData.luogo}
               onChange={handleInputChange}
               placeholder="Inserisci luogo"
+              required
             />
           </FloatingLabel>
+
+          <Form.Group className="mb-3">
+            <Form.Label className="p-2">Partecipanti</Form.Label>
+            {formData.partecipanti.map((partecipante, index) => (
+              <div className="d-flex mb-2" key={index}>
+                <Form.Control
+                  type="email"
+                  value={partecipante}
+                  onChange={(e) => handlePartecipantiChange(e, index)}
+                  placeholder="Email partecipante"
+                  required
+                />
+                <Button variant="danger" onClick={() => handleRemovePartecipante(index)} className="ms-2">
+                  Rimuovi
+                </Button>
+              </div>
+            ))}
+            <Button className="btn-custom" onClick={handleAddPartecipante}>
+              Aggiungi Partecipante
+            </Button>
+          </Form.Group>
+
+          {errors.length > 0 && (
+            <ul className="text-danger">
+              {errors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          )}
 
           <FloatingLabel controlId="note" label="Note" className="mb-3">
             <Form.Control
               as="textarea"
-              rows={3}
               name="note"
               value={formData.note}
               onChange={handleInputChange}
@@ -266,59 +296,22 @@ const CreaEventoGenerico = () => {
             />
           </FloatingLabel>
 
-          <Form.Group className="mb-3">
-            <Form.Label className="p-2">Partecipanti (Email)</Form.Label>
-            {formData.partecipanti.map((partecipante, index) => (
-              <div key={index} className="d-flex align-items-center mb-2">
-                <FloatingLabel
-                  controlId={`partecipante-${index}`}
-                  label={`Email Partecipante ${index + 1}`}
-                  className="flex-grow-1"
-                >
-                  <Form.Control
-                    type="email"
-                    name={`partecipante-${index}`}
-                    value={partecipante}
-                    onChange={(e) => handlePartecipantiChange(e, index)}
-                    placeholder="Inserisci email"
-                  />
-                </FloatingLabel>
-                <Button
-                  variant="danger"
-                  className="ms-2"
-                  onClick={() => handleRemovePartecipante(index)}
-                  disabled={formData.partecipanti.length === 1}
-                >
-                  Rimuovi
-                </Button>
-              </div>
-            ))}
-            <Button variant="primary" className="mt-2" onClick={handleAddPartecipante}>
-              Aggiungi Partecipante
-            </Button>
-          </Form.Group>
-
-          {/* Errori */}
-          {errors.length > 0 && (
-            <div className="alert alert-danger">
-              {errors.map((error, index) => (
-                <p key={index}>{error}</p>
-              ))}
-            </div>
-          )}
-
-          {/* Risposta del server */}
-          {serverResponse && <div className={`alert alert-${serverResponse.status}`}>{serverResponse.message}</div>}
-
-          <Button variant="secondary" onClick={handleBack} className="me-2">
-            Indietro
-          </Button>
-          <Button variant="primary" type="submit">
+          <Button className="btn-custom" type="submit">
             Crea Evento
           </Button>
+          <Button variant="secondary" onClick={handleBack} className="ms-2">
+            Torna Indietro
+          </Button>
+
+          {serverResponse && (
+            <div className={`alert mt-3 alert-${serverResponse.status === "success" ? "success" : "danger"}`}>
+              {serverResponse.message}
+            </div>
+          )}
         </Form>
       </Container>
     </>
   );
 };
+
 export default CreaEventoGenerico;
