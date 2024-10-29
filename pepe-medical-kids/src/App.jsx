@@ -19,6 +19,7 @@ import ResetPassword from "./components/users/ResetPassword.jsx";
 import ResetPasswordViaMail from "./components/users/ResetPasswordViaMail.jsx";
 import DettagliContatto from "/src/components/comunicazioni/DettagliContatto.jsx";
 import RegistrazioneUtente from "./components/users/RegistrazioneUtenti.jsx";
+import Profile from "./components/users/Profile.jsx";
 
 function App() {
   return (
@@ -44,6 +45,14 @@ function App() {
           element={
             <PrivateRoute role="ADMIN, MEDICO, RECEPTIONIST">
               <ResetPassword />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute role="ADMIN, MEDICO, RECEPTIONIST,GENITORE,PAZIENTE">
+              <Profile />
             </PrivateRoute>
           }
         />

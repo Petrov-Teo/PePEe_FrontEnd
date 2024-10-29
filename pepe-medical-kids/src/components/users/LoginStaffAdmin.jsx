@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Container, Row, Col, InputGroup } from "react-bootstrap";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Importa le icone
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth } from "../config/AuthContext";
+import "/src/components/users/UsersCss.css"
 
 const LoginStaff = () => {
   const [email, setEmail] = useState("");
@@ -127,7 +128,7 @@ const LoginStaff = () => {
               </div>
             </Form.Group>
 
-            <Button variant="primary" type="submit" className="mt-4 w-100">
+            <Button type="submit" className="mt-4 w-100 btn-custom ">
               Login
             </Button>
           </Form>

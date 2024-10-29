@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Modal } from "react-bootstrap";
+import "/src/components/users/UsersCss.css"
 
 const ResetPasswordViaMail = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [showModal, setShowModal] = useState(false); // Stato per il modale
+  const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,13 +57,13 @@ const ResetPasswordViaMail = () => {
         return alert("Email non trovata o ruolo non riconosciuto. Riprova.");
       }
 
-      // Mostra il modale di successo
+
       setShowModal(true);
 
-      // Chiudi il modale dopo 3 secondi
+
       setTimeout(() => {
         setShowModal(false);
-        // Reindirizza alla dashboard o alla pagina di login
+
         const routes = {
           MEDICO: "/dashboard-medico",
           ADMIN: "/dashboard-admin",
@@ -75,11 +76,14 @@ const ResetPasswordViaMail = () => {
         } else {
           alert("Ruolo non riconosciuto");
         }
-      }, 3000); // 3000 millisecondi = 3 secondi
+      }, 3000);
     } catch (error) {
       console.error("Errore durante il reset della password:", error);
       setError("Si è verificato un errore. Riprova più tardi.");
     }
+  };
+  const handleBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -101,14 +105,17 @@ const ResetPasswordViaMail = () => {
 
             {error && <p className="text-danger mt-3">{error}</p>}
 
-            <Button variant="primary" type="submit" className="mt-4 w-100">
+            <Button variant="secondary" onClick={handleBack} className="mt-4 w-100">
+              Torna Indietro
+            </Button>
+            <Button type="submit" className="mt-4 w-100 btn-custom">
               Invia richiesta
             </Button>
           </Form>
         </Col>
       </Row>
 
-      {/* Modale di successo */}
+
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Richiesta inviata</Modal.Title>

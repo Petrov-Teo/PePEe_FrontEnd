@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table, Modal, Form, Alert, Spinner } from "react-bootstrap";
+import "/src/components/users/UsersCss.css"
 
 const MedicoManagement = () => {
   const [medici, setMedici] = useState([]);
@@ -176,7 +177,7 @@ const MedicoManagement = () => {
   return (
     <div>
       <h2>Gestione Medici</h2>
-      <Button variant="primary" onClick={() => handleShowModal()}>
+      <Button className="btn-custom " onClick={() => handleShowModal()}>
         Aggiungi Medico
       </Button>
       <Table striped bordered hover className="mt-3">
@@ -324,7 +325,7 @@ const MedicoManagement = () => {
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit" disabled={isSubmitting}>
+            <Button className="btn-custom" type="submit" disabled={isSubmitting}>
               {isSubmitting ? <Spinner animation="border" size="sm" /> : isEditMode ? "Aggiorna" : "Aggiungi"}
             </Button>
           </Form>

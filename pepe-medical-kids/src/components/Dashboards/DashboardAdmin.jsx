@@ -52,56 +52,53 @@ const DashboardAdmin = () => {
       <Row>
         <ContattiRicevuti />
       </Row>
+      <Container className="d-flex flex-wrap justify-content-center gap-5">
+        <Row className="col-lg-4 col-md-6 col-12 mb-4 d-flex justify-content-center">
+          <Card className="text-center card-auto-width border border-2">
+            <Card.Body className="card-small-padding">
+              <div
+                className="d-flex justify-content-center align-items-center"
+                onClick={handleNavigate}
+                style={{ cursor: "pointer" }}
+              >
+                <img src={creEventoIcona} alt="Crea Evento" width={60} height={60} />
+                <span className="ms-2">Crea Nuovo Evento</span>
+              </div>
+            </Card.Body>
+          </Card>
+        </Row>
+        <Row className="col-lg-7 col-md-12 col-12">
+          <Card className="">
+            <h3 className="titlePers">
+              Eventi di Oggi <span className="m-0 p-0">{new Date().toLocaleDateString("it-IT")}</span>
+            </h3>
+            {loading && <p>Caricamento eventi...</p>}
+            {error && <p>{error}</p>}
+            {dailyEvents.length === 0 && <p className="fw-3">Nessun evento per oggi.</p>}
+            {dailyEvents.length > 0 && (
+              <ul>
+                {dailyEvents.map((event) => (
+                  <li key={event.id}>
+                    {event.title} - {new Date(event.start).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })} fino alle {new Date(event.end).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+        </Row>
+      </Container>
       <Accordion activeKey={activeKey} onSelect={setActiveKey}>
         <Accordion.Item eventKey="0" className="m-5">
           <Accordion.Header>CALENDARIO</Accordion.Header>
           <Accordion.Body>
-            <Container className="d-flex flex-wrap justify-content-center gap-5">
-              <Row className="col-lg-4 col-md-6 col-12 mb-4">
-                <Card className="text-center card-auto-width border border-2">
-                  <Card.Body className="card-small-padding">
-                    <div
-                      className="d-flex justify-content-center align-items-center"
-                      onClick={handleNavigate}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <img src={creEventoIcona} alt="Crea Evento" width={60} height={60} />
-                      <span className="ms-2">Crea Nuovo Evento</span>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Row>
-              <Row className="col-lg-8 col-md-12 col-12">
-                <Card className="">
-                  <h3 className="titlePers">
-                    Eventi di Oggi <span className="m-0 p-0">{new Date().toLocaleDateString("it-IT")}</span>
-                  </h3>
-                  {loading && <p>Caricamento eventi...</p>}
-                  {error && <p>{error}</p>}
-                  {dailyEvents.length === 0 && <p className="fw-3">Nessun evento per oggi.</p>}
-                  {dailyEvents.length > 0 && (
-                    <ul>
-                      {dailyEvents.map((event) => (
-                        <li key={event.id}>
-                          {event.title}
-                          {new Date(event.start).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
-                          fino alle
-                          {new Date(event.end).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </Card>
-              </Row>
-            </Container>
             <EventList />
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
       <br />
-      <h4 className="mb-4 text-start ms-3">Fatture Clienti</h4>
+      <h4 className="mt-4 mb-4 text-start div-sezioni border border-2">Fatture Clienti</h4>
       <div className="container">
-        <div className="row g-4">
+        <div className="row g-4 justify-content-center">
           {fatturatoClienti.map((item, index) => (
             <div className="col-lg-4 col-md-6 col-12" key={index}>
               <Card className="text-center card-auto-width border border-2">
@@ -116,9 +113,9 @@ const DashboardAdmin = () => {
           ))}
         </div>
       </div>
-      <h4 className="mb-4 text-start ms-3">Gestione Utenti</h4>
+      <h4 className="mt-4 mb-4 text-start div-sezioni border border-2">Gestione Utenti</h4>
       <div className="container">
-        <div className="row g-4">
+        <div className="row g-4 justify-content-center">
           {gestioneUtenti.map((item, index) => (
             <div className="col-lg-4 col-md-6 col-12" key={index}>
               <Card className="text-center card-auto-width border border-2">
@@ -134,9 +131,9 @@ const DashboardAdmin = () => {
         </div>
       </div>
       <br />
-      <h4 className="mb-4 text-start ms-3">Cartelle Mediche</h4>
+      <h4 className="mb-4 text-start div-sezioni border border-2">Cartelle Mediche</h4>
       <div className="container">
-        <div className="row g-4">
+        <div className="row g-4 justify-content-center">
           {cartellaMedica.map((item, index) => (
             <div className="col-lg-4 col-md-6 col-12" key={index}>
               <Card className="text-center card-auto-width border border-2">

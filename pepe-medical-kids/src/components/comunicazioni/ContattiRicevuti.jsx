@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Alert, Container, Table, Row, Col } from "react-bootstrap";
+import { Alert, Container, Table, Row, Col, Form } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import nessunContatto from "/src/assets/comunicazioni/presenzaContatti.svg";
-import nessunContattoIcon from "/src/assets/comunicazioni/nessunContatto.svg"; // Nuova icona
+import nessunContattoIcon from "/src/assets/comunicazioni/nessunContatto.svg";
 import "/src/components/comunicazioni/ComunicazioniCss.css";
 
 const ContattiRicevuti = () => {
@@ -11,6 +11,8 @@ const ContattiRicevuti = () => {
   const [contattiAll, setContattiAll] = useState([]);
   const [error, setError] = useState(null);
   const [mostraDettagli, setMostraDettagli] = useState(false);
+
+  const [filterArchiviato, setFilterArchiviato] = useState("nonArchiviato");
 
   const token = localStorage.getItem("authToken");
 
@@ -38,7 +40,15 @@ const ContattiRicevuti = () => {
     fetchContatti();
   }, []);
 
-  const hasMessages = contattiAll.length > 0;
+
+  const filteredContatti = contattiAll.filter(contatto => {
+    const archiviatoMatch = filterArchiviato === 'tutti' ||
+      (filterArchiviato === 'archiviato' && contatto.archivia) ||
+      (filterArchiviato === 'nonArchiviato' && !contatto.archivia);
+    return archiviatoMatch;
+  });
+
+
   const contattiNonGestiti = contattiAll.filter((contatto) => !contatto.gestito);
   const numeroContattiDaGestire = contattiNonGestiti.length;
 
@@ -65,53 +75,74 @@ const ContattiRicevuti = () => {
       </Row>
 
       {mostraDettagli && (
-        <Table striped bordered hover responsive className="mx-auto">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Gestione</th>
-              <th>Email</th>
-              <th>Data Inviata</th>
-              <th>Note</th>
-              <th>Stato</th>
-            </tr>
-          </thead>
-          <tbody>
-            {contattiAll.length === 0 ? (
+        <>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group>
+                <Form.Label>Filtra per Archiviato</Form.Label>
+                <Form.Select value={filterArchiviato} onChange={(e) => setFilterArchiviato(e.target.value)}>
+                  <option value="tutti">Tutti</option>
+                  <option value="archiviato">Archiviato</option>
+                  <option value="nonArchiviato">Non Archiviato</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Table striped bordered hover responsive className="mx-auto">
+            <thead>
               <tr>
-                <td colSpan="6" className="text-muted">
-                  Nessun contatto da mostrare.
-                </td>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Data Inviata</th>
+                <th>Note</th>
+                <th>Stato</th>
+                <th>Gestito</th>
+                <th>Archiviato</th>
               </tr>
-            ) : (
-              contattiAll.map((contatto) => (
-                <tr
-                  key={contatto.idRichiestaComunicazione}
-                  onClick={() => navigate(`/contatti/${contatto.idRichiestaComunicazione}`)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <td>{contatto.nome}</td>
-                  <td>{contatto.gestito ? "Gestito" : "Non Gestito"}</td>
-                  <td>{contatto.email}</td>
-                  <td>
-                    {new Date(contatto.dataInvio).toLocaleString("it-IT", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
-                    })}
-                  </td>
-                  <td>{contatto.note}</td>
-                  <td className={contatto.letto ? "text-black" : "font-weight-bold text-danger"}>
-                    {contatto.letto ? "Letto" : "Non Letto"}
+            </thead>
+            <tbody>
+              {filteredContatti.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="text-muted">
+                    Nessun contatto da mostrare.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
+              ) : (
+                filteredContatti.map((contatto) => (
+                  <tr
+                    key={contatto.idRichiestaComunicazione}
+                    onClick={() => navigate(`/contatti/${contatto.idRichiestaComunicazione}`)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <td>{contatto.nome}</td>
+                    <td>{contatto.email}</td>
+                    <td>
+                      {new Date(contatto.dataInvio).toLocaleString("it-IT", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })}
+                    </td>
+                    <td>{contatto.note}</td>
+                    <td className={contatto.letto ? "text-black" : "font-weight-bold text-danger"}>
+                      {contatto.letto ? "Letto" : "Non Letto"}
+                    </td>
+                    <td className={contatto.gestito ? "text-black" : "font-weight-bold text-danger"}>
+                      {contatto.gestito ? "Gestito" : "Non Gestito"}
+                    </td>
+                    <td className={contatto.letto ? "text-black" : "font-weight-bold text-danger"}>
+                      {contatto.archivia ? "Archiviato" : "Non Archiviato"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </Table>
+        </>
       )}
     </Container>
   );

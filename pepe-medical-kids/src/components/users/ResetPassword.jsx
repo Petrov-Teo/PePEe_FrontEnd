@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Form, Button, Container, InputGroup } from "react-bootstrap";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Importa le icone
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import "/src/components/users/UsersCss.css"
 
 const routes = {
   MEDICO: "/dashboard-medico",
@@ -20,7 +21,7 @@ const ResetPassword = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Recupera il token dal localStorage
+
   const token = localStorage.getItem("authToken")?.trim();
 
   useEffect(() => {
@@ -40,8 +41,7 @@ const ResetPassword = () => {
       return;
     }
 
-    console.log(token); // Stampa il token per il debug
-
+    console.log(token);
     try {
       const response = await fetch(`http://localhost:3001/${role}/reset-password/${idUtente}`, {
         method: "POST",
@@ -59,10 +59,10 @@ const ResetPassword = () => {
       if (response.ok) {
         alert("Password reset effettuato con successo!");
 
-        // Correggi il ruolo qui
+
         let userRole = role ? role.toUpperCase() : null;
 
-        // Aggiungi un controllo per "ADMINS" e converti in "ADMIN"
+
         if (userRole === "ADMINS") {
           userRole = "ADMIN";
         }
@@ -92,6 +92,9 @@ const ResetPassword = () => {
       console.error("Errore durante il reset della password:", error);
       setError("Si è verificato un errore. Riprova più tardi.");
     }
+  };
+  const handleBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -147,7 +150,10 @@ const ResetPassword = () => {
           </InputGroup>
         </Form.Group>
 
-        <Button variant="primary" type="submit" className="mt-4 w-100">
+        <Button variant="secondary" onClick={handleBack} className="mt-4 w-100">
+          Torna Indietro
+        </Button>
+        <Button type="submit" className="mt-4 w-100 btn-custom">
           Reset Password
         </Button>
       </Form>

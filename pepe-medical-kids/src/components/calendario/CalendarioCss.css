@@ -1,0 +1,16 @@
+.formGroup{
+    background: linear-gradient(135deg, rgba(173, 216, 230, 0.4), rgba(255, 182, 193, 0.4));
+   }
+
+
+.btn-custom {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    transition: background-color 0.4s ease;
+  }
+  
+  .btn-custom:hover {
+    background-color: #2e7d32;
+    color: #fff;
+  }
