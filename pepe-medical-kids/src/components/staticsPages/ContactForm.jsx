@@ -123,7 +123,7 @@ const ContactForm = () => {
               o richiedere la cancellazione dei propri dati in qualsiasi momento.
             </p>
 
-            <Button type="submit" className="btn-custom">
+            <Button type="submit" className="btn-custom mb-3">
               Invia
             </Button>
           </Form>

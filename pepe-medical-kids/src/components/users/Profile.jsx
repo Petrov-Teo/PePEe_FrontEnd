@@ -58,7 +58,7 @@ const Profile = () => {
                 <Col md={8}>
                     <Card className="formGroup">
                         <Card.Header>
-                            <Row className="justify-content-center">
+                            <Row className="justify-content-center rounded">
                                 <Col md={10}>
                                     <h2>Profilo {userData.ruolo}</h2>
                                 </Col>

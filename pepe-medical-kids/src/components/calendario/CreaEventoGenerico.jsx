@@ -146,10 +146,8 @@ const CreaEventoGenerico = () => {
 
   return (
     <>
-      <Container className="">
-        <h1 className="mt-3">Crea Nuovo Evento</h1>
-      </Container>
-      <Container className="d-flex justify-content-center align-items-center vh-100 formGroup col-10 rounded">
+      <h1 className="mt-3">Crea Nuovo Evento</h1>
+      <Container className="d-flex justify-content-center align-items-center py-4 formGroup col-10 rounded">
         <Form className="col-12 col-md-8 col-lg-6" onSubmit={handleSubmit}>
 
           <FloatingLabel controlId="nome" label="Nome Evento" className="mb-3">
@@ -313,5 +311,4 @@ const CreaEventoGenerico = () => {
     </>
   );
 };
-
 export default CreaEventoGenerico;
