@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert, Container, Table, Row, Col, Form } from "react-bootstrap";
-import { FaTrash } from "react-icons/fa";
 import nessunContatto from "/src/assets/comunicazioni/presenzaContatti.svg";
 import nessunContattoIcon from "/src/assets/comunicazioni/nessunContatto.svg";
 import "/src/components/comunicazioni/ComunicazioniCss.css";

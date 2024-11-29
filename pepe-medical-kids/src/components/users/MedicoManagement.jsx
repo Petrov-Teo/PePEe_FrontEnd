@@ -25,6 +25,18 @@ const MedicoManagement = () => {
   const getToken = () => {
     return localStorage.getItem("authToken");
   };
+  const handleShowDeleteConfirm = (medico) => {
+    setMedicoToDelete(medico);
+    setShowDeleteConfirmModal(true);
+  };
+  const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+  const [medicoToDelete, setMedicoToDelete] = useState(null);
+  const confirmDelete = async () => {
+    if (!medicoToDelete) return;
+    await handleDelete(medicoToDelete.idUtente);
+    setShowDeleteConfirmModal(false);
+    setMedicoToDelete(null);
+  };
 
   const fetchMedici = async () => {
     const token = getToken();
@@ -207,7 +219,7 @@ const MedicoManagement = () => {
                 </Button>
               </td>
               <td>
-                <Button variant="danger" onClick={() => handleDelete(medico.idUtente)}>
+                <Button variant="danger" onClick={() => handleShowDeleteConfirm(medico)}>
                   Elimina
                 </Button>
               </td>
@@ -366,6 +378,38 @@ const MedicoManagement = () => {
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseConfirmModal}>
             Chiudi
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showDeleteConfirmModal} onHide={() => setShowDeleteConfirmModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Conferma Eliminazione</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Sei sicuro di voler eliminare il medico <strong>{medicoToDelete?.nome} {medicoToDelete?.cognome}</strong>?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteConfirmModal(false)}>
+            Annulla
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Conferma
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showDeleteConfirmModal} onHide={() => setShowDeleteConfirmModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Conferma Eliminazione</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Sei sicuro di voler eliminare il medico <strong>{medicoToDelete?.nome} {medicoToDelete?.cognome}</strong>?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteConfirmModal(false)}>
+            Annulla
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Conferma
           </Button>
         </Modal.Footer>
       </Modal>

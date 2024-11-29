@@ -23,7 +23,7 @@ const LoginStaff = () => {
       const roleLoginEndpoints = {
         ADMIN: "admins",
         MEDICO: "medici",
-        RECEPTIONIST: "segretarys",
+        RECEPTIONIST: "receptionists",
       };
 
       let token, ruolo, userData;
